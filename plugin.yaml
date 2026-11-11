@@ -1,0 +1,27 @@
+name: deja-fix
+version: 0.1.0
+manifest_version: 2
+api_version: 1
+description: >-
+  Stops your agent from putting back code that already failed. Deja Fix remembers every version of
+  every file the agent writes in a session, and what happened next: the tests or build it ran, or the
+  user saying "still broken". When an edit would put a file back to a version that already failed, it
+  is stopped before it runs, with the time of that version and what failed. If the agent insists, the
+  second try goes through. Hermes' own guard catches identical tool calls; this catches the same code
+  reached by different edits. /deja shows what is tracked. No model calls.
+author: salch-cred
+license: MIT
+homepage: https://github.com/salch-cred/deja-fix
+tags: [coding, loops, testing, reliability, guardrails, debugging]
+requires_hermes: ">=0.23.0"
+
+provides_hooks:
+  - pre_tool_call
+  - post_tool_call
+  - pre_llm_call
+
+config_schema:
+  mode:
+    type: str
+    default: block
+    description: block stops the edit once; warn only records it; off disables the check.
